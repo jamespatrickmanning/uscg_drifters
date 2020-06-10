@@ -10,18 +10,18 @@ where our_area is 34-46N, and -77--64W (ie the Northeast Shelf)
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
-#NOTE: I needed the following two lines on my Toshiba laptop runs
-import os
-os.environ['PROJ_LIB'] = 'c:\\Users\\Joann\\anaconda3\\pkgs\\proj4-5.2.0-ha925a31_1\\Library\share'
+#NOTE: I needed the following two lines on my Toshiba laptop runs in order for basemap to work
+#import os
+#os.environ['PROJ_LIB'] = 'c:\\Users\\Joann\\anaconda3\\pkgs\\proj4-5.2.0-ha925a31_1\\Library\share'
 from mpl_toolkits.basemap import Basemap
-from scipy.interpolate import griddata
+from scipy.interpolate import griddata # needed for gridding bathymetry
 
-area='NE'
-input_file='all_assets_637272425998242740.csv'
+area='NE' # Northeast shelf area
+input_file='all_assets_637272425998242740.csv' # all the drifter data for the following period on NE Shelf
 time_period='May 2019 - May 2020'
-gs=50      # number of bins in the x and y direction so,  if you want more detail, make it bigger
-ss=100     # subsample input data so, if you want more detail, make it smaller
-cont=[-200]
+gs=50      # number of bins in the x and y direction so,  if you want more detail, make it bigger to contour depth
+ss=100     # subsample depth input data so, if you want more detail, make it smaller 
+cont=[-200] # 200 meter isobath
 
 def getgbox(area):
   # gets geographic box based on area
@@ -44,6 +44,7 @@ def getgbox(area):
   elif area=='NE':
     gbox=[-76.,-66.,35.,44.5] # NE Shelf 
   return gbox
+
 def add_isobath(m,gs,ss,cont):
     # draws an isobath on map given gridsize,subsample rate,and contour level
     # these inputs are typically 50, 100, and 200 for entire shelf low resolution
@@ -70,6 +71,7 @@ def make_basemap(gb):
     m.drawmeridians(meridians,labels=[0,0,0,1],fontsize=10,linewidth=0)
     return m
 
+# MAIN PROGRAM STARTS HERE
 # Make a basemap
 gb=getgbox(area)
 m=make_basemap(gb)        # adds coastline
